@@ -8,15 +8,15 @@
 
 ## Executive Summary
 
-This report presents a hybrid intelligent agent for solving Hangman puzzles, combining Hidden Markov Models (HMM) for probabilistic letter prediction with Reinforcement Learning (RL) for strategic decision-making. Our agent achieved a **25.625% success rate** on the test set with significant improvements over baseline approaches.
+This report presents a hybrid intelligent agent for solving Hangman puzzles, combining Hidden Markov Models (HMM) for probabilistic letter prediction with Reinforcement Learning (RL) for strategic decision-making. Our agent achieved a **26.45% success rate** on the full test set with significant improvements over baseline approaches.
 
-**Final Performance Metrics (320-game evaluation):**
-- Success Rate: 25.625% (82 wins out of 320 games)
-- Total Wrong Guesses: 1,759
+**Final Performance Metrics (2000-game evaluation):**
+- Success Rate: 26.45% (529 wins out of 2000 games)
+- Total Wrong Guesses: 10,859
 - Total Repeated Guesses: 0
-- Final Score: **-8,713**
+- Final Score: **-53,766**
 
-**Key Achievement:** Advanced bigram-enhanced agent improved success rate by **53% over baseline** (25.625% vs 16.875%).
+**Key Achievement:** Advanced bigram-enhanced agent improved success rate by **57% over baseline** (26.45% vs 16.875%).
 
 ---
 
@@ -140,7 +140,7 @@ Strategy: Grid search over hyperparameters
 - Conclusion: Hyperparameter tuning alone insufficient
 ```
 
-**3. Advanced Agent with Bigrams (25.625% success - 53% improvement)**
+**3. Advanced Agent with Bigrams (26.45% success on final 2000-game evaluation)**
 ```python
 Strategy: Added contextual bigram features
 - 50% positional frequency
@@ -178,40 +178,42 @@ Rather than ε-greedy or softmax action selection, we:
 
 | Approach | Success Rate | Wins | Wrong Guesses | Final Score |
 |----------|--------------|------|---------------|-------------|
-| Baseline | 16.875% | 54 | 1,819 | -9,041 |
-| Basic Optimized | 16.875% | 54 | 1,819 | -9,041 |
-| **Advanced (Bigram)** | **25.625%** | **82** | **1,759** | **-8,713** |
+| Baseline (320 games) | 16.875% | 54 | 1,819 | -9,041 |
+| Basic Optimized (320 games) | 16.875% | 54 | 1,819 | -9,041 |
+| Advanced - Sample (320 games) | 25.625% | 82 | 1,759 | -8,713 |
+| **Advanced - Final (2000 games)** | **26.45%** | **529** | **10,859** | **-53,766** |
 
-**Improvement Analysis:**
-- Success rate: +8.75 percentage points (+53% relative improvement)
-- Additional wins: +28 games
-- Fewer mistakes: -60 wrong guesses
-- Score improvement: +328 points
+**Improvement Analysis (Final 2000-game evaluation vs Baseline):**
+- Success rate: +9.575 percentage points (+57% relative improvement)
+- Win rate increased from ~16.875% to 26.45%
+- Average wrong guesses per game: 5.43 (10,859 / 2000)
+- Zero repeated guesses achieved through proper action masking
 
 ### 3.2 Scoring Formula Impact
 
 ```
 Final Score = (Success Rate × 2000) - (Wrong Guesses × 5) - (Repeated Guesses × 2)
 
-For Advanced Agent (320 games):
-= 82 wins - (1,759 × 5) - (0 × 2)
-= 82 - 8,795 - 0
-= -8,713
+For Advanced Agent (Final 2000-game evaluation):
+= 529 wins - (10,859 × 5) - (0 × 2)
+= 529 - 54,295 - 0
+= -53,766
 ```
 
-**Projected Score for 2000 Games:**
-Assuming performance scales linearly:
-- Expected wins: ~512 (25.625% × 2000)
-- Expected wrong guesses: ~10,994
-- Projected score: **512 - 54,970 = -54,458**
+**Actual Results (2000 Games):**
+- Total wins: 529 (26.45% success rate)
+- Total wrong guesses: 10,859
+- Total repeated guesses: 0
+- Final score: **-53,766**
 
-**Key Observation:** The scoring formula heavily penalizes wrong guesses (-5 each), making high success rates critical. Even at 25% success, most games result in 6 wrong guesses before losing.
+**Key Observation:** The scoring formula heavily penalizes wrong guesses (-5 each), making high success rates critical. Even at 26.45% success, most games result in multiple wrong guesses before winning or losing.
 
 ### 3.3 Learning Curves & Optimization
 
 **Grid Search Results:**
-- **Basic Optimization:** 36 configurations tested, best = -9,041
-- **Advanced Optimization:** 56 configurations tested, best = -8,713
+- **Basic Optimization:** 36 configurations tested (320-game sample)
+- **Advanced Optimization:** 56 configurations tested (320-game sample)
+- **Final Evaluation:** Best configuration tested on full 2000-game test set
 
 **Best Hyperparameters:**
 ```python
@@ -270,75 +272,27 @@ smoothing_alpha = 0.5   # Laplace smoothing parameter
 
 ## Part 5: Future Improvements
 
-If given another week, we would prioritize the following enhancements:
+If given additional time, we would focus on these key enhancements:
 
-### 5.1 Short-Term Improvements (1-2 days)
+**1. Trigram Analysis**
+- Extend bigram features to trigrams (e.g., "ING", "TION")
+- Capture longer letter patterns for better predictions
 
-**1. Deep Q-Network (DQN) Implementation**
-- Replace frequency heuristic with neural network Q-function approximator
-- **Input:** Concatenated embedding of masked word, guessed letters, lives remaining
-- **Output:** Q-values for each possible letter action
-- **Expected Impact:** 5-10% success rate improvement via true policy learning
+**2. Enhanced Smoothing Techniques**
+- Explore adaptive smoothing based on word length
+- Better handling of rare letter combinations
 
-**2. Enhanced Bigram Features**
-- **Trigram analysis:** "ING", "TION" patterns
-- **Word boundary markers:** Start/end letter patterns (e.g., words often start with "T", end with "E")
-- **Expected Impact:** 3-5% success rate improvement
+**3. Word Boundary Features**
+- Add start/end letter patterns (e.g., words often start with "T", end with "E")
+- Improve predictions for beginning and ending positions
 
-**3. Curriculum Learning**
-- Train on easy words (long, common patterns) first
-- Gradually introduce difficult words (short, rare patterns)
-- **Expected Impact:** Faster convergence, better generalization
+**4. Larger Training Corpus**
+- Train on additional English words beyond the 50,000 corpus
+- Better generalization to uncommon words
 
-### 5.2 Medium-Term Improvements (3-5 days)
-
-**4. Hybrid HMM-LSTM Architecture**
-- Replace HMM with bidirectional LSTM for sequence modeling
-- **Advantages:** Captures long-range dependencies, handles variable-length words naturally
-- **Challenge:** Requires significant training data and compute
-- **Expected Impact:** 10-15% success rate improvement
-
-**5. Meta-Learning / Transfer Learning**
-- Pre-train on larger English corpus (100k+ words)
-- Fine-tune on 50k Hangman corpus
-- **Expected Impact:** Better handling of rare words and patterns
-
-**6. Multi-Task Learning**
-- Joint training on related tasks (e.g., word completion, anagram solving)
-- Shared representations improve generalization
-- **Expected Impact:** 5-8% success rate improvement
-
-### 5.3 Advanced Research Directions (1+ week)
-
-**7. Model-Based RL with Planning**
-- Learn transition model of Hangman environment
-- Use Monte Carlo Tree Search (MCTS) for lookahead planning
-- **Inspiration:** AlphaGo-style approach for word games
-- **Expected Impact:** 15-20% success rate improvement, near-optimal play
-
-**8. Contextual Bandits Approach**
-- Frame as contextual bandit problem (single-step decision)
-- Context: masked word + guessed letters
-- Action: next letter to guess
-- **Advantage:** Simpler than full RL, faster training
-- **Expected Impact:** 8-12% success rate improvement with proper feature engineering
-
-**9. Ensemble Methods**
-- Combine HMM, frequency-based, and DQN agents
-- Weighted voting or learned meta-policy
-- **Expected Impact:** 5-7% success rate improvement via complementary strengths
-
-### 5.4 Engineering & Efficiency
-
-**10. Parallel Training**
-- Distribute games across multiple processes/GPUs
-- Run full 2000-game evaluations in minutes instead of hours
-- **Impact:** Faster iteration, more hyperparameter experiments
-
-**11. Online Learning**
-- Update agent policy during gameplay based on revealed letters
-- Adapt strategy mid-game when initial guesses provide new information
-- **Expected Impact:** 3-5% success rate improvement
+**5. Dynamic Weight Adjustment**
+- Adjust feature weights based on game progress
+- Adapt strategy as more letters are revealed
 
 ---
 
@@ -347,11 +301,12 @@ If given another week, we would prioritize the following enhancements:
 ### Summary of Contributions
 
 We successfully built a hybrid intelligent Hangman agent that:
-1.  Trained 23 word-length-specific HMMs achieving 54.95% prediction accuracy
+1. Trained 23 word-length-specific HMMs achieving 54.95% prediction accuracy
 2.  Implemented and optimized frequency-based RL agent with bigram enhancement
-3.  Achieved **53% improvement over baseline** (25.625% vs 16.875% success rate)
+3.  Achieved **57% improvement over baseline** (26.45% vs 16.875% success rate)
 4.  Demonstrated zero repeated guesses through proper action space management
 5.  Conducted comprehensive hyperparameter optimization (92 total configurations)
+6.  Final evaluation on full 2000-game test set: **-53,766 score**
 
 ### Final Reflections
 
@@ -361,9 +316,9 @@ We successfully built a hybrid intelligent Hangman agent that:
 - Sparse reward function simplified learning without sacrificing performance
 
 **What We'd Do Differently:**
-- Start with DQN from the beginning rather than heuristic approach
 - Allocate more time to feature engineering (trigrams, word boundaries)
-- Implement curriculum learning to improve training efficiency
+- Test more diverse hyperparameter combinations
+- Implement adaptive weight adjustment based on game state
 
 **Lessons Learned:**
 - **Domain knowledge matters:** Understanding English letter patterns (bigrams) was more valuable than complex RL algorithms
@@ -393,8 +348,10 @@ This project provided deep insights into:
 ### A.2 Hardware & Compute
 - **Training Time:** 
   - HMM: ~92 seconds (23 models)
-  - RL Grid Search: ~15 minutes (92 configurations)
-- **Evaluation Time:** ~2 minutes per 320 games
+  - RL Grid Search: ~15 minutes (92 configurations on 320-game sample)
+- **Evaluation Time:** 
+  - ~2 minutes per 320 games
+  - ~12 minutes for full 2000-game evaluation
 
 ### A.3 File Structure
 ```
