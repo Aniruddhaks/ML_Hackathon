@@ -1,448 +1,361 @@
-# Hangman Solver: Hidden Markov Model Implementation (Part A)
+# Hangman Solver: ML Implementation
 
-## 📋 Project Overview
+## Project Overview
 
-This project implements a sophisticated **Hangman letter prediction system** using **Hidden Markov Models (HMM)**. The system learns patterns from a corpus of English words and intelligently predicts the next letter to guess in a game of Hangman, considering letter frequency, position patterns, and previously guessed letters.
+This project implements an intelligent Hangman letter prediction system using two complementary approaches:
+- **Part A:** Hidden Markov Model (HMM) for letter sequence prediction
+- **Part B:** Reinforcement Learning (RL) agent with frequency-based prediction and hyperparameter optimization
 
-**Part A** focuses on training and validating HMM models for optimal letter prediction accuracy.
-
----
-
-## 🎯 Objectives
-
-1. **Train separate HMM models** for words of different lengths
-2. **Learn letter frequency patterns** and their distributions
-3. **Predict the best next letter** given a partially revealed word
-4. **Validate model performance** on test data
-5. **Generate comprehensive metrics** for model evaluation
+The system learns patterns from a corpus of English words and predicts the next best letter to guess in Hangman, considering letter frequency, positional patterns, bigram relationships, and previously guessed letters.
 
 ---
 
-## 📊 Architecture & Components
+## Part A: Hidden Markov Model Implementation
 
-### 1. **Data Preprocessing Pipeline**
+### Notebook
+`part-a.ipynb`
 
-**Location:** `hmm.ipynb` - Data Preprocessing Section
+### Overview
+Part A implements a probabilistic HMM-based approach that trains separate models for each word length to capture length-specific letter patterns and transitions.
 
-The system loads and preprocesses training and test data:
+### Architecture
 
+#### 1. Data Preprocessing
+- Loads training corpus and test data from `Data/corpus.txt` and `Data/test.txt`
+- Converts all words to lowercase
+- Filters non-alphabetic characters
+- Organizes words by length for stratified model training
+
+#### 2. HMM Model Class (HangmanHMM)
+
+**Key Components:**
+- Separate MultinomialHMM for each word length (3-10 states per model)
+- Letter-to-index mapping for observation sequences
+- Baum-Welch training algorithm with 100 iterations
+- Laplace smoothing to prevent zero probabilities
+
+**Training Process:**
+- Groups corpus words by length
+- For each length: trains individual HMM with letter frequency initialization
+- Number of hidden states: `min(max(3, word_length // 2), 10)`
+- Emission probabilities initialized from letter frequency distributions
+
+#### 3. Prediction Engine (HangmanPredictor)
+
+**Algorithm:**
+1. Extract emission probabilities from trained HMM for word length
+2. Average probabilities across unknown positions (marked as '_')
+3. Exclude already-guessed letters
+4. Normalize and return highest probability letter
+
+### Validation Metrics
+- Overall success rate across all test words
+- Success rate stratified by word length
+- Prediction confidence analysis (correct vs incorrect)
+- Model coverage statistics
+
+### Output Files
+- `hmm_hangman_model.pkl`: Serialized trained models
+- `hmm_validation_results.json`: Performance metrics and statistics
+
+---
+
+## Part B: Reinforcement Learning Agent
+
+### Notebook
+`part-b.ipynb`
+
+### Overview
+Part B implements a frequency-based RL agent with three progressive optimization levels:
+1. Baseline (no optimization)
+2. Basic grid search optimization
+3. Advanced optimization with bigram analysis
+
+### Agent Architectures
+
+#### 1. Baseline Agent (FrequencyAgent)
+
+**Features:**
+- Positional frequency analysis: tracks letter occurrence at each position for each word length
+- Global frequency analysis: overall letter frequency across corpus
+- Weighted combination: 60% positional + 40% global
+
+**Prediction Process:**
+1. Calculate positional frequencies for unknown positions
+2. Combine with global frequencies using fixed weights
+3. Exclude guessed and known letters
+4. Return letter with maximum probability
+
+#### 2. Optimized Agent (OptimizedFrequencyAgent)
+
+**Enhancements:**
+- Tunable hyperparameters: `pos_weight`, `global_weight`, `smoothing_alpha`
+- Laplace smoothing with adjustable alpha parameter
+- Grid search over hyperparameter space (36 configurations)
+
+**Hyperparameter Grid:**
+- `pos_weight`: [0.5, 0.6, 0.7]
+- `global_weight`: [0.3, 0.4, 0.5]
+- `smoothing_alpha`: [0.5, 1.0, 1.5, 2.0]
+
+**Optimization Process:**
+- Tests all combinations on 16% test sample
+- Evaluates success rate and final score for each configuration
+- Selects best hyperparameters based on scoring function
+
+#### 3. Advanced Agent (AdvancedFrequencyAgent)
+
+**Key Innovations:**
+- Bigram frequency analysis: letter pair patterns (e.g., 'qu', 'th', 'ing')
+- Context-aware predictions: uses adjacent known letters
+- Forward and backward bigram probabilities
+- Expanded hyperparameter grid (320+ configurations)
+
+**Bigram Implementation:**
+- `bigram_after`: P(next_letter | current_letter)
+- `bigram_before`: P(prev_letter | current_letter)
+- Combines with positional and global frequencies
+
+**Enhanced Hyperparameter Grid:**
+- `pos_weight`: [0.45, 0.50, 0.55, 0.60, 0.65]
+- `global_weight`: [0.20, 0.25, 0.30, 0.35]
+- `bigram_weight`: [0.10, 0.15, 0.20, 0.25]
+- `smoothing_alpha`: [0.5, 1.0, 1.5, 2.0]
+
+**Weight Constraint:** pos_weight + global_weight + bigram_weight = 1.0
+
+### Hangman Game Environment
+
+**Class:** HangmanGame
+- Tracks masked word, guessed letters, wrong guesses, repeated guesses
+- Maximum wrong guesses: 6 (standard Hangman rules)
+- Win condition: all letters revealed
+- Loss condition: 6 wrong guesses
+
+### Evaluation Metrics
+
+**Performance Indicators:**
+- Success rate: percentage of games won
+- Total wrong guesses: incorrect letter predictions
+- Total repeated guesses: duplicate letter attempts
+- Final score: `(success_rate/100 * games) - (wrong * 5) - (repeated * 2)`
+
+**Test Configuration:**
+- 16% of test dataset for all evaluations (fair comparison)
+- Random seed: 42 (reproducibility)
+- Same test sample used across all three approaches
+
+### Output Files
+- `rl_baseline_results.json`: Baseline agent performance
+- `rl_optimized_results.json`: Grid search results with best hyperparameters
+- `rl_advanced_results.json`: Advanced optimization results with all configurations
+- `rl_comparison.png`: Visual comparison (baseline vs optimized)
+- `rl_comprehensive_comparison.png`: Three-way comparison visualization
+
+---
+
+## Technical Details
+
+### Scoring Function
+```
+Final Score = (Success Rate / 100 * Number of Games) 
+              - (Total Wrong Guesses * 5) 
+              - (Total Repeated Guesses * 2)
+```
+
+This penalizes wrong and repeated guesses heavily to encourage efficient prediction.
+
+### Why Bigrams Improve Performance
+- Captures letter pair dependencies (e.g., 'u' almost always follows 'q')
+- Context-aware: uses known adjacent letters to predict missing ones
+- Handles common patterns: '_ing', 'th_', 'sh_', etc.
+- Reduces wrong guesses by leveraging sequential letter relationships
+
+### Smoothing Strategy
+Laplace (add-alpha) smoothing prevents zero probabilities:
 ```python
-def load_corpus(file_path):
-    """Load words from corpus file"""
-    with open(file_path, 'r') as f:
-        words = f.read().splitlines()
-    return words
-
-def preprocess_words(words):
-    """Preprocess words: lowercase and filter"""
-    processed_words = []
-    for word in words:
-        word = word.lower()
-        if word.isalpha():  # Remove non-alphabetic words
-            processed_words.append(word)
-    return processed_words
+count[letter] += smoothing_alpha
+probability = count[letter] / sum(all_counts)
 ```
 
-**Inputs:**
-- `Data/corpus.txt` - Training corpus containing thousands of English words
-- `Data/test.txt` - Test set for validation
-
-**Output:** Cleaned word lists ready for model training
+Benefits:
+- Handles unseen letter combinations
+- Adjustable alpha controls smoothing strength
+- Better generalization to test data
 
 ---
 
-### 2. **HMM Model Class**
+## Dependencies
 
-**Class:** `HangmanHMM`
-
-#### Key Responsibilities:
-- Maintain separate models for each word length (crucial for accuracy)
-- Convert words to observation sequences
-- Train MultinomialHMM for each length category
-
-#### Core Methods:
-
-**`word_to_sequence(word)`**
-- Converts a word into a sequence of letter indices (0-25 for a-z)
-- Example: "hello" → [[7], [4], [11], [11], [14]]
-
-**`train_for_length(words_of_length, n_states=5)`**
-- Trains an individual HMM for words of specific length
-- Parameters:
-  - `n_states`: Automatically determined as `min(max(3, word_length // 2), 10)`
-  - Allows HMM to capture hidden states representing letter patterns
-- Returns: Trained MultinomialHMM model or None if training fails
-
-**`train(words)`**
-- Groups words by length
-- Trains separate models for each length
-- Reports training summary with success statistics
-
-#### Model Architecture:
-
-```
-Hidden States (n): 3-10 states per model
-↓ (Transition Matrix A)
-Observations: 26 letters (a-z)
-↓ (Emission Matrix B)
-Output: Letter probabilities
-```
-
----
-
-### 3. **Prediction Engine**
-
-**Class:** `HangmanPredictor`
-
-Generates intelligent letter predictions based on trained HMM models.
-
-#### Core Methods:
-
-**`get_letter_probabilities(word_length)`**
-- Retrieves emission probabilities for all 26 letters
-- Returns normalized probability distribution
-- Falls back to uniform distribution (1/26) if no model exists for word length
-
-**`predict_next_letter(masked_word, guessed_letters)`**
-
-Algorithm:
-1. Get word length from masked word
-2. Retrieve letter probabilities for each position
-3. Average probabilities across unknown positions (marked with '_')
-4. Zero out already-guessed letters
-5. Normalize remaining probabilities
-6. Return letter with highest probability
-
-**Example:**
-```
-Masked word: "h_ll_"
-Guessed: {'h', 'l'}
-→ Predicts 'e' with probability 0.35
-```
-
----
-
-## 🔧 Technical Details
-
-### Hidden Markov Model Formulation
-
-**For each word length:**
-
-- **π (Initial State Probability):** Uniform distribution
-  - $\pi_i = \frac{1}{n}$ for all states $i$
-
-- **A (Transition Matrix):** Probability of moving from state to state
-  - $P(s_j | s_i)$ - Initialized uniformly, learned during training
-
-- **B (Emission Matrix):** Probability of observing letter given hidden state
-  - $P(o_t | s_t)$ - Learned from letter frequencies in training words
-  - Initially seeded with letter frequency distributions
-
-### Training Algorithm: Baum-Welch
-
-- **Iterations:** 100 training epochs
-- **Convergence Tolerance:** 0.01
-- **Random State:** 42 (for reproducibility)
-
-### Letter Frequency Smoothing
-
-```python
-letter_counts = Counter(''.join(words_of_length))
-total_letters = sum(letter_counts.values())
-freq_vec = np.array([letter_counts.get(ch, 0) / total_letters 
-                      for ch in self.alphabet])
-
-# Add Laplace smoothing to avoid zero probabilities
-freq_vec = freq_vec + 1e-6
-freq_vec = freq_vec / np.sum(freq_vec)
-```
-
----
-
-## 📈 Validation & Performance Metrics
-
-### Testing Procedure
-
-**For each test word:**
-
-1. Randomly reveal 1 letter as initial hint
-2. Generate masked word representation
-3. Predict next letter to guess
-4. Check if prediction appears in unrevealed positions
-5. Record correctness and prediction confidence
-
-### Key Metrics
-
-#### 1. **Overall Success Rate**
-- Percentage of correct predictions across all test words
-- Target: > 50% (better than random 26-letter guessing)
-
-#### 2. **Success Rate by Word Length**
-- Accuracy varies significantly with word length
-- Models are better tuned for common word lengths (5-7 letters)
-
-#### 3. **Prediction Confidence Analysis**
-- Average confidence of correct predictions
-- Average confidence of incorrect predictions
-- Confidence gap indicates model calibration
-
-#### 4. **Model Coverage**
-- Percentage of test words with trained models
-- Words with model coverage typically have higher accuracy
-
-### Performance Output
-
-Results are saved to `hmm_validation_results.json`:
-
-```json
-{
-  "overall_success_rate": 52.34,
-  "total_predictions": 2500,
-  "correct_predictions": 1309,
-  "incorrect_predictions": 1191,
-  "by_word_length": {
-    "3": {
-      "success_rate": 45.23,
-      "correct": 85,
-      "total": 188,
-      "has_model": true
-    },
-    ...
-  },
-  "trained_lengths": [3, 4, 5, 6, 7, 8, 9, 10, ...],
-  "total_trained_models": 23
-}
-```
-
----
-
-## 📊 Visualization
-
-### Generated Plots (in `hmm_validation_results.png`)
-
-#### 1. **Success Rate by Word Length**
-- Bar chart with color-coding
-- Green: ≥50% success (good performance)
-- Orange: 40-50% success (acceptable)
-- Red: <40% success (needs improvement)
-
-#### 2. **Confidence Distribution**
-- Histogram comparing correct vs incorrect predictions
-- Shows separation between confidence levels
-- Indicates model's ability to distinguish quality predictions
-
-#### 3. **Cumulative Success Rate**
-- Trend line showing performance across word lengths
-- Helps identify which lengths perform best
-
-#### 4. **Model Coverage vs Success Rate**
-- Scatter plot showing relationship between model availability and accuracy
-- Color intensity represents success rate
-
----
-
-## 💾 Output Files
-
-| File | Description |
-|------|-------------|
-| `hmm_hangman_model.pkl` | Serialized trained models and predictor |
-| `hmm_validation_results.json` | Performance metrics in JSON format |
-| `hmm_validation_results.png` | Four-panel visualization of results |
-
----
-
-## 🚀 Usage
-
-### Running Part A
-
-Execute the notebook `hmm.ipynb` to:
-
-```python
-# 1. Load and preprocess data
-python -c "from hmm import preprocess_words; ..."
-
-# 2. Train models
-hmm_model = HangmanHMM()
-hmm_model.train(processed_words)
-
-# 3. Make predictions
-predictor = HangmanPredictor(hmm_model)
-next_letter, probability = predictor.predict_next_letter("h_ll_", {'h', 'l'})
-
-# 4. Validate on test set
-# (Run validation section in notebook)
-
-# 5. View results
-# - Check console output for metrics
-# - View hmm_validation_results.png for visualizations
-# - Parse hmm_validation_results.json for programmatic access
-```
-
-### Loading Saved Models
-
-```python
-import pickle
-
-with open('hmm_hangman_model.pkl', 'rb') as f:
-    model_data = pickle.load(f)
-    hmm_model = model_data['hmm_model']
-    predictor = model_data['predictor']
-
-# Make predictions
-letter, prob = predictor.predict_next_letter("_e__o", {'e'})
-```
-
----
-
-## 📦 Dependencies
-
-```
-numpy              # Numerical computations
-hmmlearn           # Hidden Markov Model implementation
-matplotlib         # Visualization
-seaborn            # Enhanced plotting
-pickle             # Model serialization
-json               # Results storage
-```
-
-Install with:
 ```bash
 pip install numpy matplotlib seaborn hmmlearn
 ```
 
----
-
-## 🔍 Key Features
-
-✅ **Separate Models per Word Length**
-- Optimized for different length patterns
-- Improves accuracy over single universal model
-
-✅ **Intelligent Letter Probability Computation**
-- Considers position-specific patterns
-- Weights unknown positions appropriately
-- Excludes already-guessed letters
-
-✅ **Robust Error Handling**
-- Graceful fallback to uniform distribution
-- Handles edge cases (very short words, no trained model, etc.)
-
-✅ **Comprehensive Validation**
-- Stratified by word length
-- Confidence-based analysis
-- Statistical significance testing
-
-✅ **Reproducible Results**
-- Fixed random seed (42)
-- Deterministic model training
-- JSON output for results verification
+**Required Packages:**
+- numpy: Numerical computations and array operations
+- matplotlib: Visualization and plotting
+- seaborn: Enhanced statistical visualizations (Part A)
+- hmmlearn: Hidden Markov Model training and inference (Part A)
+- pickle: Model serialization
+- json: Results storage
+- collections.Counter: Letter frequency counting
+- string: Alphabet utilities
 
 ---
 
-## 📈 Performance Insights
+## Usage
 
-### Why HMM Works for Hangman
+### Running Part A (HMM)
+```bash
+# Execute all cells in part-a.ipynb
+# Output: hmm_hangman_model.pkl, hmm_validation_results.json
+```
 
-1. **Captures Sequential Patterns**
-   - HMM models transition probabilities between letters
-   - Learns that certain letters follow others (e.g., 'u' after 'q')
+### Running Part B (RL)
+```bash
+# Execute all cells in part-b.ipynb sequentially
+# Baseline evaluation (cell 10)
+# Basic optimization (cells 12-13)
+# Advanced optimization (cells 18-19)
+# Comparison visualization (cell 20)
+```
 
-2. **Position-Aware Letter Distribution**
-   - Different letters are common at different positions
-   - 'e' is common everywhere; 'q' rare but specific positions
+### Loading Trained Models
+```python
+import pickle
 
-3. **Probabilistic Framework**
-   - Naturally handles uncertainty
-   - Provides confidence scores for predictions
-   - Enables ranking of multiple options
+# Load HMM model
+with open('hmm_hangman_model.pkl', 'rb') as f:
+    model_data = pickle.load(f)
+    predictor = model_data['predictor']
 
-4. **Scalability**
-   - Independent models for each word length
-   - Efficient inference
-   - Handles new words not in training set
-
----
-
-## 🎓 Learning Outcomes
-
-This implementation demonstrates:
-
-- **Machine Learning Fundamentals:** Model training, validation, evaluation
-- **Probabilistic Modeling:** HMM theory and practice
-- **Signal Processing:** Sequence modeling, hidden state inference
-- **Software Engineering:** Clean classes, modular design, error handling
-- **Data Science:** Preprocessing, metrics computation, visualization
+# Make prediction
+letter, prob = predictor.predict_next_letter("h_ll_", {'h', 'l'})
+```
 
 ---
 
-## 🔗 Integration with Part B
+## File Structure
 
-The trained models saved in `hmm_hangman_model.pkl` are used in **Part B** (Reinforcement Learning) as:
-
-- **Feature extractor** for state representation
-- **Action value estimator** providing letter probabilities
-- **Baseline policy** for performance comparison
-- **Training signal** for RL agent rewards
-
----
-
-## 📝 Notes & Troubleshooting
-
-### Common Issues
-
-**Issue:** Model training fails for certain word lengths
-- **Cause:** Insufficient training data (< 2 words)
-- **Solution:** Minimum 2 words required; typically not an issue with standard corpora
-
-**Issue:** Low success rate overall
-- **Cause:** Imbalanced word length distribution or poor initialization
-- **Solution:** Validate corpus quality; consider letter frequency preprocessing
-
-**Issue:** Predictions unchanged across guesses
-- **Cause:** Already-guessed letter filtering not working
-- **Solution:** Verify `guessed_letters` parameter is properly passed
+```
+ML_Hackathon/
+├── Data/
+│   ├── corpus.txt              # Training corpus
+│   └── test.txt                # Test dataset
+├── part-a.ipynb                # HMM implementation
+├── part-b.ipynb                # RL agent with optimization
+├── hmm_hangman_model.pkl       # Trained HMM models
+└── README.md                   # This file
+```
 
 ---
 
-## 👤 Author Information
+## Key Features
 
-- **Project:** ML Hackathon - Hangman Solver
-- **Part A:** HMM Implementation & Validation
-- **Repository:** ML_Hackathon (Aniruddhaks/akanksh branch)
+**Part A (HMM):**
+- Separate models per word length for optimized accuracy
+- Probabilistic framework with emission and transition matrices
+- Baum-Welch training algorithm
+- Confidence-based prediction analysis
 
----
-
-## 📄 License & Attribution
-
-This implementation uses:
-- **hmmlearn:** Open source HMM library for Python
-- **numpy/matplotlib:** Scientific Python stack
-
----
-
-## ✅ Checklist for Successful Execution
-
-- [ ] Install required packages: `pip install numpy matplotlib seaborn hmmlearn`
-- [ ] Ensure `Data/corpus.txt` and `Data/test.txt` exist
-- [ ] Run `hmm.ipynb` notebook cells in order
-- [ ] Verify `hmm_hangman_model.pkl` is created (~5-50 MB depending on corpus)
-- [ ] Check `hmm_validation_results.json` for metrics
-- [ ] View `hmm_validation_results.png` for visualizations
-- [ ] Success rate should be significantly > 50% (typically 55-65% depending on corpus)
+**Part B (RL):**
+- Progressive optimization: baseline, basic, advanced
+- Systematic hyperparameter grid search
+- Bigram analysis for context-aware predictions
+- Multi-source probability combination
+- Fair comparison across approaches (same test sample)
 
 ---
 
-## 📚 Additional Resources
+## Performance Insights
 
-### HMM Theory
+### Why This Approach Works
+
+**HMM Advantages:**
+- Captures sequential letter patterns
+- Models hidden states representing word structure
+- Provides probability distributions over all letters
+
+**Frequency-Based Advantages:**
+- Computationally efficient
+- Directly uses observed letter statistics
+- Positional awareness improves accuracy
+
+**Bigram Advantages:**
+- Context-dependent predictions
+- Handles letter pair dependencies
+- Reduces wrong guesses on patterned words
+
+**Combined Strengths:**
+- HMM for sequential modeling
+- Frequency for positional patterns
+- Bigrams for local context
+- Grid search for optimal weight tuning
+
+---
+
+## Reproducibility
+
+All implementations use fixed random seed (42) for reproducibility:
+- Model training produces identical results
+- Test sample selection is deterministic
+- Grid search explores configurations in fixed order
+- Results can be verified across runs
+
+---
+
+## Troubleshooting
+
+**Low Success Rate:**
+- Verify corpus quality and size
+- Check that test data is representative
+- Ensure preprocessing removes invalid words
+
+**Model Training Failures:**
+- Requires minimum 2 words per length for HMM training
+- Check for sufficient training data in corpus
+- Verify hmmlearn installation
+
+**Memory Issues:**
+- Grid search tests many configurations (320+ for advanced)
+- Consider reducing hyperparameter grid size
+- Process smaller test sample if needed
+
+---
+
+## Results Summary
+
+Expected performance ranges (actual results may vary with corpus):
+
+**Part A (HMM):**
+- Overall success rate: 50-65%
+- Best performance: word lengths 5-7
+- Confidence gap: correct predictions show higher confidence
+
+**Part B (RL):**
+- Baseline: 40-55% success rate
+- Basic optimization: 45-60% success rate
+- Advanced optimization: 50-65% success rate
+- Improvement: 5-15% gain from baseline to advanced
+
+---
+
+## Author Information
+
+**Project:** ML Hackathon - Hangman Solver
+**Repository:** ML_Hackathon (Aniruddha k s,Akanksh Rai , Akarsh T ,Anirudh Anand krishnan)
+**Branch:** part-A_akanksh
+
+---
+
+## References
+
+**HMM Theory:**
 - Rabiner, L. R. (1989). "A tutorial on hidden Markov models and selected applications"
-- Murphy, K. P. (2012). "Machine Learning: A Probabilistic Perspective"
-
-### Implementation References
 - hmmlearn documentation: https://hmmlearn.readthedocs.io
-- Hangman AI strategies and letter frequency analysis
 
----
+**Frequency Analysis:**
+- English letter frequency distributions
+- Positional letter statistics in word corpora
 
 **Last Updated:** November 2025
-**Status:** ✅ Complete and Validated

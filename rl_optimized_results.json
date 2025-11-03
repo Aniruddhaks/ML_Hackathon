@@ -1,0 +1,176 @@
+{
+    "algorithm": "Optimized RL Agent (Grid Search)",
+    "best_hyperparameters": {
+        "pos_weight": 0.6,
+        "global_weight": 0.4,
+        "smoothing_alpha": 0.5
+    },
+    "test_sample_size": 320,
+    "success_rate_percent": 16.875,
+    "total_wins": 54,
+    "total_wrong_guesses": 1819,
+    "total_repeated_guesses": 0,
+    "final_score": -9041.0,
+    "all_configurations": [
+        {
+            "pos_weight": 0.5,
+            "global_weight": 0.4,
+            "smoothing_alpha": 0.5,
+            "success_rate": 16.875,
+            "wins": 54,
+            "total_wrong": 1820,
+            "total_repeated": 0,
+            "final_score": -9046.0
+        },
+        {
+            "pos_weight": 0.5,
+            "global_weight": 0.4,
+            "smoothing_alpha": 1.0,
+            "success_rate": 16.875,
+            "wins": 54,
+            "total_wrong": 1820,
+            "total_repeated": 0,
+            "final_score": -9046.0
+        },
+        {
+            "pos_weight": 0.5,
+            "global_weight": 0.4,
+            "smoothing_alpha": 1.5,
+            "success_rate": 16.875,
+            "wins": 54,
+            "total_wrong": 1820,
+            "total_repeated": 0,
+            "final_score": -9046.0
+        },
+        {
+            "pos_weight": 0.5,
+            "global_weight": 0.4,
+            "smoothing_alpha": 2.0,
+            "success_rate": 16.875,
+            "wins": 54,
+            "total_wrong": 1820,
+            "total_repeated": 0,
+            "final_score": -9046.0
+        },
+        {
+            "pos_weight": 0.5,
+            "global_weight": 0.5,
+            "smoothing_alpha": 0.5,
+            "success_rate": 16.5625,
+            "wins": 53,
+            "total_wrong": 1821,
+            "total_repeated": 0,
+            "final_score": -9052.0
+        },
+        {
+            "pos_weight": 0.5,
+            "global_weight": 0.5,
+            "smoothing_alpha": 1.0,
+            "success_rate": 16.5625,
+            "wins": 53,
+            "total_wrong": 1821,
+            "total_repeated": 0,
+            "final_score": -9052.0
+        },
+        {
+            "pos_weight": 0.5,
+            "global_weight": 0.5,
+            "smoothing_alpha": 1.5,
+            "success_rate": 16.25,
+            "wins": 52,
+            "total_wrong": 1823,
+            "total_repeated": 0,
+            "final_score": -9063.0
+        },
+        {
+            "pos_weight": 0.5,
+            "global_weight": 0.5,
+            "smoothing_alpha": 2.0,
+            "success_rate": 16.25,
+            "wins": 52,
+            "total_wrong": 1823,
+            "total_repeated": 0,
+            "final_score": -9063.0
+        },
+        {
+            "pos_weight": 0.6,
+            "global_weight": 0.4,
+            "smoothing_alpha": 0.5,
+            "success_rate": 16.875,
+            "wins": 54,
+            "total_wrong": 1819,
+            "total_repeated": 0,
+            "final_score": -9041.0
+        },
+        {
+            "pos_weight": 0.6,
+            "global_weight": 0.4,
+            "smoothing_alpha": 1.0,
+            "success_rate": 16.875,
+            "wins": 54,
+            "total_wrong": 1819,
+            "total_repeated": 0,
+            "final_score": -9041.0
+        },
+        {
+            "pos_weight": 0.6,
+            "global_weight": 0.4,
+            "smoothing_alpha": 1.5,
+            "success_rate": 16.875,
+            "wins": 54,
+            "total_wrong": 1819,
+            "total_repeated": 0,
+            "final_score": -9041.0
+        },
+        {
+            "pos_weight": 0.6,
+            "global_weight": 0.4,
+            "smoothing_alpha": 2.0,
+            "success_rate": 16.875,
+            "wins": 54,
+            "total_wrong": 1819,
+            "total_repeated": 0,
+            "final_score": -9041.0
+        },
+        {
+            "pos_weight": 0.7,
+            "global_weight": 0.3,
+            "smoothing_alpha": 0.5,
+            "success_rate": 15.937499999999998,
+            "wins": 51,
+            "total_wrong": 1819,
+            "total_repeated": 0,
+            "final_score": -9044.0
+        },
+        {
+            "pos_weight": 0.7,
+            "global_weight": 0.3,
+            "smoothing_alpha": 1.0,
+            "success_rate": 15.937499999999998,
+            "wins": 51,
+            "total_wrong": 1819,
+            "total_repeated": 0,
+            "final_score": -9044.0
+        },
+        {
+            "pos_weight": 0.7,
+            "global_weight": 0.3,
+            "smoothing_alpha": 1.5,
+            "success_rate": 15.937499999999998,
+            "wins": 51,
+            "total_wrong": 1819,
+            "total_repeated": 0,
+            "final_score": -9044.0
+        },
+        {
+            "pos_weight": 0.7,
+            "global_weight": 0.3,
+            "smoothing_alpha": 2.0,
+            "success_rate": 15.937499999999998,
+            "wins": 51,
+            "total_wrong": 1819,
+            "total_repeated": 0,
+            "final_score": -9044.0
+        }
+    ]
+}
