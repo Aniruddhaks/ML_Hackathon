@@ -325,18 +325,20 @@ All implementations use fixed random seed (42) for reproducibility:
 
 ## Results Summary
 
-Expected performance ranges (actual results may vary with corpus):
-
 **Part A (HMM):**
-- Overall success rate: 50-65%
-- Best performance: word lengths 5-7
+- Overall success rate: 54.95%
+- Best performance: word lengths 16-22 (70-100%)
+- Models trained: 23 separate HMMs
 - Confidence gap: correct predictions show higher confidence
 
-**Part B (RL):**
-- Baseline: 40-55% success rate
-- Basic optimization: 45-60% success rate
-- Advanced optimization: 50-65% success rate
-- Improvement: 5-15% gain from baseline to advanced
+**Part B (RL) - Final 2000-Game Evaluation:**
+- Baseline: 16.875% success rate (320 games)
+- Basic optimization: 16.875% success rate (320 games)
+- **Advanced optimization: 26.45% success rate (2000 games)**
+- Total wrong guesses: 10,859
+- Total repeated guesses: 0
+- **Final Score: -53,766**
+- Improvement: 57% gain from baseline to advanced
 
 ---
 
