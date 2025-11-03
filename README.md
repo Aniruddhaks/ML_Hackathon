@@ -344,7 +344,7 @@ Expected performance ranges (actual results may vary with corpus):
 
 **Project:** ML Hackathon - Hangman Solver
 **Repository:** ML_Hackathon (Aniruddha k s,Akanksh Rai , Akarsh T ,Anirudh Anand krishnan)
-**Branch:** part-A_akanksh
+
 
 ---
 
