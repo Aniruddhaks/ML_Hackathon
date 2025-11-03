@@ -1,0 +1,9 @@
+{
+    "algorithm": "Baseline RL Agent (No Optimization)",
+    "test_sample_size": 320,
+    "success_rate_percent": 16.875,
+    "total_wins": 54,
+    "total_wrong_guesses": 1819,
+    "total_repeated_guesses": 0,
+    "final_score": -9041.0
+}

@@ -29,6 +29,7 @@ venv.bak/
 # Environment files - include any .env patterns
 .env
 .env.*
+.venv
 
 # Byte-compiled / optimized / DLL files
 *.pyc

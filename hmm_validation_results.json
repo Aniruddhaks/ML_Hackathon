@@ -1,0 +1,154 @@
+{
+    "overall_success_rate": 54.95495495495496,
+    "total_predictions": 1998,
+    "correct_predictions": 1098,
+    "incorrect_predictions": 900,
+    "by_word_length": {
+        "3": {
+            "success_rate": 44.44444444444444,
+            "correct": 4,
+            "total": 9,
+            "has_model": true
+        },
+        "4": {
+            "success_rate": 43.24324324324324,
+            "correct": 16,
+            "total": 37,
+            "has_model": true
+        },
+        "5": {
+            "success_rate": 40.65934065934066,
+            "correct": 37,
+            "total": 91,
+            "has_model": true
+        },
+        "6": {
+            "success_rate": 40.57971014492754,
+            "correct": 56,
+            "total": 138,
+            "has_model": true
+        },
+        "7": {
+            "success_rate": 46.82926829268293,
+            "correct": 96,
+            "total": 205,
+            "has_model": true
+        },
+        "8": {
+            "success_rate": 49.1869918699187,
+            "correct": 121,
+            "total": 246,
+            "has_model": true
+        },
+        "9": {
+            "success_rate": 51.09489051094891,
+            "correct": 140,
+            "total": 274,
+            "has_model": true
+        },
+        "10": {
+            "success_rate": 56.38297872340425,
+            "correct": 159,
+            "total": 282,
+            "has_model": true
+        },
+        "11": {
+            "success_rate": 54.86725663716814,
+            "correct": 124,
+            "total": 226,
+            "has_model": true
+        },
+        "12": {
+            "success_rate": 64.63414634146342,
+            "correct": 106,
+            "total": 164,
+            "has_model": true
+        },
+        "13": {
+            "success_rate": 68.75,
+            "correct": 88,
+            "total": 128,
+            "has_model": true
+        },
+        "14": {
+            "success_rate": 73.25581395348837,
+            "correct": 63,
+            "total": 86,
+            "has_model": true
+        },
+        "15": {
+            "success_rate": 70.2127659574468,
+            "correct": 33,
+            "total": 47,
+            "has_model": true
+        },
+        "16": {
+            "success_rate": 87.87878787878788,
+            "correct": 29,
+            "total": 33,
+            "has_model": true
+        },
+        "17": {
+            "success_rate": 64.70588235294117,
+            "correct": 11,
+            "total": 17,
+            "has_model": true
+        },
+        "18": {
+            "success_rate": 100.0,
+            "correct": 8,
+            "total": 8,
+            "has_model": true
+        },
+        "19": {
+            "success_rate": 100.0,
+            "correct": 3,
+            "total": 3,
+            "has_model": true
+        },
+        "20": {
+            "success_rate": 100.0,
+            "correct": 2,
+            "total": 2,
+            "has_model": true
+        },
+        "21": {
+            "success_rate": 100.0,
+            "correct": 1,
+            "total": 1,
+            "has_model": true
+        },
+        "22": {
+            "success_rate": 100.0,
+            "correct": 1,
+            "total": 1,
+            "has_model": true
+        }
+    },
+    "trained_lengths": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23
+    ],
+    "total_trained_models": 23
+}
