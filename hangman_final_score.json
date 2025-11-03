@@ -1,0 +1,164 @@
+{
+    "algorithm": "Simple Frequency-Based Hangman Agent",
+    "description": "Guesses letters in order of global frequency from corpus",
+    "num_games": 2000,
+    "max_wrong_allowed": 6,
+    "success_rate_percent": 16.400000000000002,
+    "total_wins": 328,
+    "total_losses": 1672,
+    "total_wrong_guesses": 11322,
+    "total_repeated_guesses": 0,
+    "avg_wrong_per_game": 5.661,
+    "avg_repeated_per_game": 0.0,
+    "avg_guesses_per_game": 11.563,
+    "final_score": -56282.0,
+    "by_word_length": {
+        "2": {
+            "success_rate_percent": 0.0,
+            "wins": 0,
+            "total": 3,
+            "avg_wrong": 6.0,
+            "avg_repeated": 0.0
+        },
+        "3": {
+            "success_rate_percent": 0.0,
+            "wins": 0,
+            "total": 9,
+            "avg_wrong": 6.0,
+            "avg_repeated": 0.0
+        },
+        "4": {
+            "success_rate_percent": 6.0606060606060606,
+            "wins": 2,
+            "total": 33,
+            "avg_wrong": 5.818181818181818,
+            "avg_repeated": 0.0
+        },
+        "5": {
+            "success_rate_percent": 6.8493150684931505,
+            "wins": 5,
+            "total": 73,
+            "avg_wrong": 5.8493150684931505,
+            "avg_repeated": 0.0
+        },
+        "6": {
+            "success_rate_percent": 8.275862068965518,
+            "wins": 12,
+            "total": 145,
+            "avg_wrong": 5.875862068965517,
+            "avg_repeated": 0.0
+        },
+        "7": {
+            "success_rate_percent": 10.559006211180124,
+            "wins": 17,
+            "total": 161,
+            "avg_wrong": 5.739130434782608,
+            "avg_repeated": 0.0
+        },
+        "8": {
+            "success_rate_percent": 9.765625,
+            "wins": 25,
+            "total": 256,
+            "avg_wrong": 5.8359375,
+            "avg_repeated": 0.0
+        },
+        "9": {
+            "success_rate_percent": 12.408759124087592,
+            "wins": 34,
+            "total": 274,
+            "avg_wrong": 5.755474452554744,
+            "avg_repeated": 0.0
+        },
+        "10": {
+            "success_rate_percent": 16.896551724137932,
+            "wins": 49,
+            "total": 290,
+            "avg_wrong": 5.603448275862069,
+            "avg_repeated": 0.0
+        },
+        "11": {
+            "success_rate_percent": 15.354330708661418,
+            "wins": 39,
+            "total": 254,
+            "avg_wrong": 5.71259842519685,
+            "avg_repeated": 0.0
+        },
+        "12": {
+            "success_rate_percent": 20.809248554913296,
+            "wins": 36,
+            "total": 173,
+            "avg_wrong": 5.601156069364162,
+            "avg_repeated": 0.0
+        },
+        "13": {
+            "success_rate_percent": 33.07086614173229,
+            "wins": 42,
+            "total": 127,
+            "avg_wrong": 5.299212598425197,
+            "avg_repeated": 0.0
+        },
+        "14": {
+            "success_rate_percent": 27.160493827160494,
+            "wins": 22,
+            "total": 81,
+            "avg_wrong": 5.419753086419753,
+            "avg_repeated": 0.0
+        },
+        "15": {
+            "success_rate_percent": 28.26086956521739,
+            "wins": 13,
+            "total": 46,
+            "avg_wrong": 5.369565217391305,
+            "avg_repeated": 0.0
+        },
+        "16": {
+            "success_rate_percent": 30.76923076923077,
+            "wins": 12,
+            "total": 39,
+            "avg_wrong": 5.153846153846154,
+            "avg_repeated": 0.0
+        },
+        "17": {
+            "success_rate_percent": 47.61904761904761,
+            "wins": 10,
+            "total": 21,
+            "avg_wrong": 5.285714285714286,
+            "avg_repeated": 0.0
+        },
+        "18": {
+            "success_rate_percent": 88.88888888888889,
+            "wins": 8,
+            "total": 9,
+            "avg_wrong": 4.222222222222222,
+            "avg_repeated": 0.0
+        },
+        "19": {
+            "success_rate_percent": 0.0,
+            "wins": 0,
+            "total": 3,
+            "avg_wrong": 6.0,
+            "avg_repeated": 0.0
+        },
+        "20": {
+            "success_rate_percent": 100.0,
+            "wins": 1,
+            "total": 1,
+            "avg_wrong": 2.0,
+            "avg_repeated": 0.0
+        },
+        "21": {
+            "success_rate_percent": 0.0,
+            "wins": 0,
+            "total": 1,
+            "avg_wrong": 6.0,
+            "avg_repeated": 0.0
+        },
+        "22": {
+            "success_rate_percent": 100.0,
+            "wins": 1,
+            "total": 1,
+            "avg_wrong": 4.0,
+            "avg_repeated": 0.0
+        }
+    }
+}

@@ -1,0 +1,140 @@
+{
+    "algorithm": "Q-Learning with HMM Integration",
+    "episodes": 2000,
+    "test_games": 2000,
+    "success_rate": 0.25,
+    "total_wins": 5,
+    "total_wrong_guesses": 11990,
+    "total_repeated_guesses": 0,
+    "final_score": -59945.0,
+    "avg_wrong_per_game": 5.995,
+    "avg_repeated_per_game": 0.0,
+    "by_word_length": {
+        "2": {
+            "success_rate": 0.0,
+            "wins": 0,
+            "total": 3,
+            "avg_wrong": 6.0
+        },
+        "3": {
+            "success_rate": 0.0,
+            "wins": 0,
+            "total": 9,
+            "avg_wrong": 6.0
+        },
+        "4": {
+            "success_rate": 0.0,
+            "wins": 0,
+            "total": 33,
+            "avg_wrong": 6.0
+        },
+        "5": {
+            "success_rate": 0.0,
+            "wins": 0,
+            "total": 73,
+            "avg_wrong": 6.0
+        },
+        "6": {
+            "success_rate": 0.0,
+            "wins": 0,
+            "total": 145,
+            "avg_wrong": 6.0
+        },
+        "7": {
+            "success_rate": 0.6211180124223602,
+            "wins": 1,
+            "total": 161,
+            "avg_wrong": 5.9937888198757765
+        },
+        "8": {
+            "success_rate": 0.78125,
+            "wins": 2,
+            "total": 256,
+            "avg_wrong": 5.98046875
+        },
+        "9": {
+            "success_rate": 0.36496350364963503,
+            "wins": 1,
+            "total": 274,
+            "avg_wrong": 5.9963503649635035
+        },
+        "10": {
+            "success_rate": 0.0,
+            "wins": 0,
+            "total": 290,
+            "avg_wrong": 6.0
+        },
+        "11": {
+            "success_rate": 0.0,
+            "wins": 0,
+            "total": 254,
+            "avg_wrong": 6.0
+        },
+        "12": {
+            "success_rate": 0.5780346820809248,
+            "wins": 1,
+            "total": 173,
+            "avg_wrong": 5.982658959537572
+        },
+        "13": {
+            "success_rate": 0.0,
+            "wins": 0,
+            "total": 127,
+            "avg_wrong": 6.0
+        },
+        "14": {
+            "success_rate": 0.0,
+            "wins": 0,
+            "total": 81,
+            "avg_wrong": 6.0
+        },
+        "15": {
+            "success_rate": 0.0,
+            "wins": 0,
+            "total": 46,
+            "avg_wrong": 6.0
+        },
+        "16": {
+            "success_rate": 0.0,
+            "wins": 0,
+            "total": 39,
+            "avg_wrong": 6.0
+        },
+        "17": {
+            "success_rate": 0.0,
+            "wins": 0,
+            "total": 21,
+            "avg_wrong": 6.0
+        },
+        "18": {
+            "success_rate": 0.0,
+            "wins": 0,
+            "total": 9,
+            "avg_wrong": 6.0
+        },
+        "19": {
+            "success_rate": 0.0,
+            "wins": 0,
+            "total": 3,
+            "avg_wrong": 6.0
+        },
+        "20": {
+            "success_rate": 0.0,
+            "wins": 0,
+            "total": 1,
+            "avg_wrong": 6.0
+        },
+        "21": {
+            "success_rate": 0.0,
+            "wins": 0,
+            "total": 1,
+            "avg_wrong": 6.0
+        },
+        "22": {
+            "success_rate": 0.0,
+            "wins": 0,
+            "total": 1,
+            "avg_wrong": 6.0
+        }
+    }
+}
